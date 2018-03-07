@@ -1,0 +1,10 @@
+Package: MR
+Title: Mendelian Randomization For A Binary Outcome And A Continuous Exposure
+Version: 0.1.0
+Author: Han Zhang, Kai Yu
+Description: This is a package for conducting Mendelian randomization analysis based on summary data. 
+Maintainer: Han Zhang <han.zhang2@nih.gov>
+Depends: R (>= 3.4.0)
+Imports: numDeriv
+License: MIT + file LICENSE
+LazyData: true
