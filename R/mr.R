@@ -1,26 +1,21 @@
 
-mr <- function(){
-
-  dat <- gen.data()
-  para0 <- dat$para0
+mr <- function(exposure, n, outcome, n1, n0, ref){
+  
+  dat <- reformat(exposure, n, outcome, n1, n0, ref)
+  exposure <- dat$exposure
+  n <- dat$n
+  outcome <- dat$outcome
+  n1 <- dat$n1
+  n0 <- dat$n0
   ref <- dat$ref
-  the0 <- dat$the0
-  gam0 <- dat$gam0
-  V <- dat$V
-  nsample <- dat$nsample
-
-  ini <- init.cc(para0, ref, the0, gam0, V)
-
-  para <- ini$para
-  para.id <- ini$para.id
-  ref <- ini$ref
-  the0 <- ini$the0
-  gam0 <- ini$gam0
-  V <- ini$V
-  inv.V <- solve(V)
-
-  fit <- NR(para, para.id, ref, the0, gam0, V, nsample)
-
-  fit
-
+  
+  fit1 <- stage1(exposure, n, ref)
+  fit2 <- stage2(outcome, n1, n0, ref)
+  fit3 <- stage3(fit1$alp, fit1$cov.alp, fit2$pi, fit2$cov.pi)
+  
+  fit3$call <- match.call()
+  class(fit3) <- 'mr'
+  
+  fit3
+  
 }
