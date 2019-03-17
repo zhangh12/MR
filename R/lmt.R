@@ -1,15 +1,28 @@
 
 ## score test for causal effect
 
-lmt <- function(bet, se, alp, inv.alp, pi, inv.pi, level, plot = FALSE){
+lmt <- function(object, level, plot = FALSE){
   
-  stat.null <- lmt.stat(0, alp, inv.alp, pi, inv.pi, level = 0.0)
+  bet <- coef(object)
+  se <- sqrt(vcov(object))
+  alp <- object$exposure$alp
+  pi <- object$outcome$pi
+  Omega <- object$Omega
+  V <- solve(Omega)
+  
+  L <- length(alp)
+  Omega11 <- Omega[1:L, 1:L]
+  Omega12 <- Omega[1:L, (L+1):(2*L)]
+  Omega21 <- t(Omega12)
+  Omega22 <- Omega[(L+1):(2*L), (L+1):(2*L)]
+  
+  stat.null <- lmt.stat(0, alp, pi, V, Omega11, Omega12, Omega21, Omega22, level = 0.0)
     
-  p <- pchisq(stat.null, df = 1, lower.tail = FALSE)
+  p.lmt <- pchisq(stat.null, df = 1, lower.tail = FALSE)
   
   fac <- qnorm((level+1)/2)
   
-  stat0 <- lmt.stat(bet, alp, inv.alp, pi, inv.pi, level)
+  stat0 <- lmt.stat(bet, alp, pi, V, Omega11, Omega12, Omega21, Omega22, level)
   b <- bet
   stat <- stat0
   iter <- 0
@@ -17,18 +30,21 @@ lmt <- function(bet, se, alp, inv.alp, pi, inv.pi, level, plot = FALSE){
     iter <- iter + 1
     bet1 <- bet - iter * se/2
     if(bet1 < bet - 5*fac*se){
-      rt1 <- list(root = bet1)
+      rt1 <- list(root = bet-qnorm((level+1)/2) *se)
       msg <- 'lower confidence limit might be inaccurate'
       warning(msg)
       break
     }
-    stat1 <- lmt.stat(bet1, alp, inv.alp, pi, inv.pi, level)
+    stat1 <- lmt.stat(bet1, alp, pi, V, Omega11, Omega12, Omega21, Omega22, level)
     b <- c(bet1, b)
     stat <- c(stat1, stat)
     if(stat0 * stat1 < 0){
       rt1 <- uniroot(lmt.stat, lower = bet1, upper = bet, 
                      extendInt = 'yes', check.conv = TRUE, trace = 10, 
-                     alp=alp, inv.alp=inv.alp, pi=pi, inv.pi=inv.pi, level=level)
+                     alp = alp, pi = pi, V = V, 
+                     Omega11 = Omega11, Omega12 = Omega12, 
+                     Omega21 = Omega21, Omega22 = Omega22, 
+                     level = level)
       break
     }
   }
@@ -38,18 +54,21 @@ lmt <- function(bet, se, alp, inv.alp, pi, inv.pi, level, plot = FALSE){
     iter <- iter + 1
     bet1 <- bet + iter * se/2
     if(bet1 > bet + 5*fac*se){
-      rt2 <- list(root = bet1)
+      rt2 <- list(root = bet+qnorm((level+1)/2) *se)
       msg <- 'upper confidence limit might be inaccurate'
       warning(msg)
       break
     }
-    stat1 <- lmt.stat(bet1, alp, inv.alp, pi, inv.pi, level)
+    stat1 <- lmt.stat(bet1, alp, pi, V, Omega11, Omega12, Omega21, Omega22, level)
     stat <- c(stat, stat1)
     b <- c(b, bet1)
     if(stat0 * stat1 < 0){
       rt2 <- uniroot(lmt.stat, lower = bet, upper = bet1, 
                      extendInt = 'yes', check.conv = TRUE, trace = 10, 
-                     alp=alp, inv.alp=inv.alp, pi=pi, inv.pi=inv.pi, level=level)
+                     alp = alp, pi = pi, V = V, 
+                     Omega11 = Omega11, Omega12 = Omega12, 
+                     Omega21 = Omega21, Omega22 = Omega22, 
+                     level = level)
       break
     }
   }
@@ -71,7 +90,7 @@ lmt <- function(bet, se, alp, inv.alp, pi, inv.pi, level, plot = FALSE){
            legend = c('Threshold', 'Causal Effect'))
   }
   
-  ci <- data.frame(LCL = rt1$root, UCL = rt2$root, P = p)
+  ci <- data.frame(LCL = rt1$root, UCL = rt2$root, P = p.lmt)
   colnames(ci)[1:2] <- paste((1+c(-1,1)*level)/2*100, '%')
   rownames(ci) <- 'LM'
   

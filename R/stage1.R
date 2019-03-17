@@ -1,5 +1,9 @@
 
 ## recover joint effect of exposure model
+## this is the solution of estimating equations
+## covariance of this estimate is computed by estimating equation method
+## accounting for variance in reference sample
+## this estimate is less efficient than using raw data (OLS), as expect
 
 # the - theta, marginal ols
 # se - nominal SE of marginal ols, provided by lm
@@ -25,6 +29,8 @@ stage1 <- function(exposure, ns, ref){
   H <- diag(diag(C))
   Vx <- diag(C) # var(x)
   n <- diag(ns) # diagonal elements are sample size for marginal model
+                # n and N are different
+                # n and N are used in note
   Vy <- mean(((n-2)*se^2+the^2) * Vx) # var(y), averaged over markers
   
   alp <- as.vector(solve(C) %*% H %*% the) # join effect, true model y ~ x * alp + N(0, tau)
@@ -36,7 +42,7 @@ stage1 <- function(exposure, ns, ref){
     EU[, l] <- X[, l] * (Xalp - X[, l] * the[l])
   }
   
-  # cov(U)
+  # B = cov(U), D = cov(V) = B - C * tau as in note
   D <- cov(EU)
   B <- D + C * tau # X has been centerized, otherwise use the following one
   # B <- (t(EU) %*% EU)/N + (t(X) %*% X)/N * tau
@@ -58,6 +64,7 @@ stage1 <- function(exposure, ns, ref){
   colnames(cov.the) <- rs
   
   list(alp = alp, se.alp = se.alp, cov.alp = cov.alp, tau=tau, 
-       the = the, se.the = se.the, cov.the = cov.the)
+       the = the, se.the = se.the, cov.the = cov.the, 
+       g1 = EU, H1 = C)
   
 }

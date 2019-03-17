@@ -1,9 +1,5 @@
 
-## object function in stage 3
-
-# alp - joint effect of exposure model
-# pi - joint effect of case-control model (logOR)
-obj.stage3 <- function(bet, alp, pi, Omega){
+alp.stage3 <- function(bet, alp, pi, Omega){
   
   L <- length(alp)
   if(nrow(Omega) != 2*L){
@@ -19,10 +15,6 @@ obj.stage3 <- function(bet, alp, pi, Omega){
   mat1 <- Omega11 + bet * (Omega12 + Omega21) + bet^2 * Omega22
   mat2 <- (Omega11 + bet * Omega21) %*% alp + (Omega12 + bet * Omega22) %*% pi
   
-  alp1 <- as.vector(solve(mat1) %*% mat2)
-  
-  vec <- c(alp - alp1, pi - bet * alp1)
-  
-  as.vector(t(vec) %*% Omega %*% vec)
+  as.vector(solve(mat1) %*% mat2)
   
 }

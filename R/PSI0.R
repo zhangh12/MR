@@ -137,12 +137,14 @@ PSI0 <- function(parms, X, n1Mat, n0Mat, gamVec, computeJ=TRUE,
   # COV(theta)
   J.theta     <- J/N
   J.theta.inv <- solve(J.theta)
-  I.psi       <- cov(cbind(PSI1, PSI2, PSI3))
+  g2          <- cbind(PSI1, PSI2, PSI3)
+  I.psi       <- cov(g2)
   tmp         <- J.gam2 %*% Sigma.gam %*% t(J.gam2)
   Sigma.theta <- J.theta.inv %*% (I.psi/N + tmp) %*% t(J.theta.inv)
   
   list(PSI=PSI, J=J, J.gam=J.gam, I.gam=I.gam, Sigma.gam=Sigma.gam, 
-       Sigma.the=Sigma.theta)
+       Sigma.the=Sigma.theta, 
+       g2 = g2, H2 = J.theta)
   
 } # END: PSI0
 

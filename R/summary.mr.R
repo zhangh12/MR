@@ -8,6 +8,7 @@ summary.mr <- function(object, ...){
                     stringsAsFactors = FALSE)
   
   colnames(TAB) <- c('Estimate', 'Std. Error', 'z value', 'Pr(>|z|)')
+  rownames(TAB) <- 'Causal'
   
   res <- list(call = object$call, 
               coefficients = TAB)

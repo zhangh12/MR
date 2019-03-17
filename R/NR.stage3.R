@@ -1,25 +1,38 @@
-## object function in stage 3
 
 # alp - joint effect of exposure model
-# inv.alp - precise matrix of alp
 # pi - joint effect of case-control model (logOR)
-# inv.pi - precise matrix of pi
-NR.stage3 <- function(par, alp, inv.alp, pi, inv.pi){
+NR.stage3 <- function(alp, pi, Omega){
   
-  bet0 <- par[1]
-  alp0 <- par[-1]
+  L <- length(alp)
+  if(nrow(Omega) != 2*L){
+    msg <- 'debug NR.stage3'
+    stop(msg)
+  }
   
-  k <- 500
+  Omega11 <- Omega[1:L, 1:L]
+  Omega12 <- Omega[1:L, (L+1):(2*L)]
+  Omega21 <- t(Omega12)
+  Omega22 <- Omega[(L+1):(2*L), (L+1):(2*L)]
+  
+  bet0 <- 0
+  alp0 <- alp
+  
+  k <- 20000
   conv <- FALSE
   while(k > 0){
-    tmp <- inv.pi %*% pi
-    bet1 <- as.vector(1/(t(alp0) %*% inv.pi %*% alp0) * t(alp0) %*% tmp)
-    alp1 <- as.vector(solve(inv.alp + bet1^2 * inv.pi) %*% (inv.alp %*% alp + bet1 * tmp))
+    bet1 <- (t(alp0) %*% Omega22 %*% pi + t(alp0) %*% Omega21 %*% (alp - alp0)) / (t(alp0) %*% Omega22 %*% alp0)
+    bet1 <- as.vector(bet1)
+    
+    alp1 <- solve(Omega11 + bet1 * (Omega12 + Omega21) + bet1^2 * Omega22) %*% ((Omega11 + bet1 * Omega21) %*% alp + (Omega12 + bet1 * Omega22) %*% pi)
+    alp1 <- as.vector(alp1)
+    
     bet0 <- bet1
     alp0 <- alp1
     k <- k-1
-    sc <- dev.stage3(c(bet0, alp0), alp, inv.alp, pi, inv.pi)
-    if(max(abs(sc)) < 1e-9){
+    
+    sc <- dev.stage3(c(bet0, alp0), alp, pi, Omega11, Omega12, Omega21, Omega22)
+    
+    if(max(abs(sc)) < 1e-5){
       conv <- TRUE
       break
     }

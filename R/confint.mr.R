@@ -10,12 +10,7 @@ confint.mr <- function(object, parm, level = 0.95, ...){
   colnames(wald.test)[1:2] <- paste((1+c(-1,1)*level)/2*100, '%')
   rownames(wald.test) <- 'Wald'
   
-  alp <- object$exposure$alp
-  inv.alp <- solve(object$exposure$cov.alp)
-  pi <- object$outcome$pi
-  inv.pi <- solve(object$outcome$cov.pi)
-  
-  lm.test <- lmt(bet=cf, se, alp, inv.alp, pi, inv.pi, level)
+  lm.test <- lmt(object, level, plot = isTRUE(list(...)$plot))
   ci <- rbind(lm.test, wald.test)
   
   ci

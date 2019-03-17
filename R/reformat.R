@@ -1,5 +1,8 @@
 
-
+## add a column 'study' to exposure and outcome
+## compute shared sample sizes of iv in exposure and outcome
+## n, n1, n0 will be matrix
+## remove iv in ref if they do not have sufficient information
 reformat <- function(exposure, n, outcome, n1, n0, ref){
   
   n <- as.vector(n)

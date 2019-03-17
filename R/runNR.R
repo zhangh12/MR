@@ -28,7 +28,11 @@ runNR <- function(parms, X, n1Mat, n0Mat, gamVec, op=NULL) {
     if (print) {
       print(paste("Iteration: ", i, ", max abs diff=", d1, ", max rel diff=", d2, sep=""))
     }
-    if ((d1 < tol.diff) || (d2 < tol.rel)) {
+    
+    psi <- PSI0(x1, X, n1Mat, n0Mat, gamVec, computeJ = FALSE)
+    
+    # if ((d1 < tol.diff) || (d2 < tol.rel)) {
+    if (max(abs(psi)) < 1e-9) {
       conv <- TRUE
       break
     }
@@ -42,6 +46,9 @@ runNR <- function(parms, X, n1Mat, n0Mat, gamVec, op=NULL) {
     stop(msg)
   }
   
+  ##     true model: Delta = exp(a + X * pi)
+  ## marginal model: delta_l = exp(mu_l + X_l * gam_l), l = 1, ..., L
+  ## pi is joint effect of interest
   L <- length(gamVec)
   a <- x1[1]
   pi <- x1[2:(L+1)]
@@ -51,6 +58,7 @@ runNR <- function(parms, X, n1Mat, n0Mat, gamVec, op=NULL) {
   list(parms=x1, score = dev$PSI, 
        a = a, pi = pi, mu = mu, gam = gam, 
        Sigma.gam = dev$Sigma.gam, Sigma.the = dev$Sigma.the, 
+       g2 = dev$g2, H2 = dev$H2, 
        niter=i, max.abs.diff=d1, max.rel.diff=d2, converged=conv)
   
 } # END: runNR

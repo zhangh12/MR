@@ -1,4 +1,10 @@
 
+## exposure: data frame with columns iv, beta, se, and study (optional)
+##        n: sample size in each study of exposure
+##  outcome: data frame with columns iv, beta, and study (optional)
+##       n1: number of cases in each study of outcome
+##       n0: number of controls in each study of outcome
+##      ref: a data frame of reference panel of iv
 mr <- function(exposure, n, outcome, n1, n0, ref){
   
   dat <- reformat(exposure, n, outcome, n1, n0, ref)
@@ -11,7 +17,7 @@ mr <- function(exposure, n, outcome, n1, n0, ref){
   
   fit1 <- stage1(exposure, n, ref)
   fit2 <- stage2(outcome, n1, n0, ref)
-  fit3 <- stage3(fit1$alp, fit1$cov.alp, fit2$pi, fit2$cov.pi)
+  fit3 <- stage3(fit1, fit2)
   
   fit3$call <- match.call()
   class(fit3) <- 'mr'
