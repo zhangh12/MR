@@ -22,6 +22,13 @@ mr <- function(exposure, n, outcome, n1, n0, ref){
   fit3$call <- match.call()
   class(fit3) <- 'mr'
   
+  ini <- fit3$ini
+  
+  o <- obj.gim(ini$para, ini$map, 
+               ini$the0, ini$inv.the, 
+               ini$gam0, ini$inv.gam, 
+               n, n1, n0, ref)
+  
   fit3
   
 }
