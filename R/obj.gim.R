@@ -1,6 +1,6 @@
 
 obj.gim <- function(para, map, the0, inv.the, gam0, inv.gam, 
-                    n, n1, n0, ref){
+                    n1, n0, ref){
   
   L <- (length(para) - 3) / 7
   n <- nrow(ref)

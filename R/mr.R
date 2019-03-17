@@ -24,10 +24,12 @@ mr <- function(exposure, n, outcome, n1, n0, ref){
   
   ini <- fit3$ini
   
-  o <- obj.gim(ini$para, ini$map, 
-               ini$the0, ini$inv.the, 
-               ini$gam0, ini$inv.gam, 
-               n, n1, n0, ref)
+  fit <- NR.gim(ini$para, ini$map, 
+                ini$the0, ini$inv.the, 
+                ini$gam0, ini$inv.gam, 
+                n1, n0, ref)
+  
+  print(cbind(fit$para,ini$para))
   
   fit3
   

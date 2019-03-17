@@ -1,3 +1,6 @@
+useDynLib(MR, .registration=TRUE)
+#exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
 importFrom(stats, cov, printCoefmat, coef, vcov, uniroot)
 importFrom(stats, pchisq, qchisq, qnorm, runif)
 importFrom(graphics, abline, legend)
@@ -6,4 +9,3 @@ S3method(summary, mr)
 S3method(print, summary.mr)
 S3method(vcov, mr)
 S3method(confint, mr)
-

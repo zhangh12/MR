@@ -10,6 +10,7 @@ gfunction <- function(para, map, n1, n0, ref){
   the <- para[map$the]
   mu <- para[map$mu]
   gam <- para[map$gam]
+  lam <- para[map$lam]
   
   ref <- as.matrix(ref)
   
