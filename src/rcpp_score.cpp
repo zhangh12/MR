@@ -4,16 +4,18 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 NumericVector rcpp_score(double bet, 
-                  double a, 
-                  NumericVector alp, 
-                  NumericVector the, 
-                  NumericVector mu, 
-                  NumericVector gam, 
-                  NumericVector lam, 
-                  NumericMatrix x, 
-                  NumericVector rho, 
-                  NumericVector d_the, 
-                  NumericVector d_gam) {
+                         double a, 
+                         NumericVector alp, 
+                         NumericVector the, 
+                         NumericVector mu, 
+                         NumericVector gam, 
+                         NumericVector lam, 
+                         NumericMatrix x, 
+                         NumericVector rho, 
+                         NumericVector the0, 
+                         NumericMatrix inv_the, 
+                         NumericVector gam0, 
+                         NumericMatrix inv_gam) {
   
   int L = x.ncol();
   int n = x.nrow();
@@ -72,14 +74,14 @@ NumericVector rcpp_score(double bet,
     
     for(int j = 0; j < 3 * L + 1; ++j){
       // lam
-      sc[4 * L + 2 + j] += g(i, j) / one_plus_g_lam;
+      sc[4 * L + 2 + j] -= g(i, j) / one_plus_g_lam;
     }
     
     // bet
-    sc[0] += g_bet_lam / one_plus_g_lam; 
+    sc[0] -= g_bet_lam / one_plus_g_lam; 
     
     // a
-    sc[1] += g_a_lam / one_plus_g_lam; 
+    sc[1] -= g_a_lam / one_plus_g_lam; 
     
     for(int k = 0; k < L; ++k){
       double g_alp_lam = .0; 
@@ -92,27 +94,33 @@ NumericVector rcpp_score(double bet,
       g_alp_lam += Delta[i] * tmp * lam[3 * L]; 
       
       // alp_k
-      sc[2 + k] += g_alp_lam / one_plus_g_lam;
+      sc[2 + k] -= g_alp_lam / one_plus_g_lam;
       
       // the_k
       double g_the_lam = -x(i, k) * x(i, k) * lam[k]; 
-      sc[2 + L + k] +=  g_the_lam / one_plus_g_lam; 
+      sc[2 + L + k] -=  g_the_lam / one_plus_g_lam; 
       
       // mu_k
       double tmp1 = - (1 + rho[k] * Delta[i]) * delta(i, k) / (one_plus_rho_delta(i, k) * one_plus_rho_delta(i, k)); 
       double tmp2 = tmp1 * x(i, k);
       double g_mu_lam = tmp1 * lam[k + L] + tmp2 * lam[k + 2 * L];
-      sc[2 + 2 * L + k] += g_mu_lam / one_plus_g_lam; 
+      sc[2 + 2 * L + k] -= g_mu_lam / one_plus_g_lam; 
       
       // gam_k
       double g_gam_lam = g_mu_lam * x(i, k);
-      sc[2 + 3 * L + k] += g_gam_lam / one_plus_g_lam; 
+      sc[2 + 3 * L + k] -= g_gam_lam / one_plus_g_lam; 
     }
   }
   
+  NumericVector d_the(L);
+  NumericVector d_gam(L);
   for(int l = 0; l < L; ++l){
-    sc[2 + L + l] += d_the[l];
-    sc[2 + 3 * L + l] += d_gam[l];
+    for(int j = 0; j < L; ++j){
+      d_the[l] += inv_the(l, j) * (the[j] - the0[j]); 
+      d_gam[l] += inv_gam(l, j) * (gam[j] - gam0[j]); 
+    }
+    sc[2 + L + l] -= d_the[l];
+    sc[2 + 3 * L + l] -= d_gam[l];
   }
   
   return sc; 

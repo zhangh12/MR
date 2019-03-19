@@ -80,6 +80,7 @@ reformat <- function(exposure, n, outcome, n1, n0, ref){
   exposure <- exposure[iv, ]
   outcome <- outcome[iv, ]
   ref <- ref[, iv, drop = FALSE]
+  ref <- scale(as.matrix(ref), scale = FALSE)
   
   rownames(exposure) <- NULL
   rownames(outcome) <- NULL

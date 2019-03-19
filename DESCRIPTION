@@ -7,7 +7,7 @@ Description: This is a package for conducting Mendelian randomization analysis b
 Maintainer: Han Zhang <han.zhang2@nih.gov>
 Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
-Imports: Rcpp (>= 1.0.0), numDeriv
+Imports: Rcpp (>= 1.0.0), numDeriv, optimx
 LinkingTo: Rcpp
 
 

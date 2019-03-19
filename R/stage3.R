@@ -32,11 +32,11 @@ stage3 <- function(fit1, fit2){
   
   para <- c(bet = bet, 
             a = fit2$a, 
-            alp = alp1, 
+            alp = fit1$alp, 
             the = fit1$the, 
             mu = fit2$mu, 
             gam = fit2$gam, 
-            lam = rep(.01, 3 * L + 1))
+            lam = runif(3 * L + 1, -.1, .1))
   
   fit$ini <- list(L = L, 
                   map = map, 
@@ -44,7 +44,8 @@ stage3 <- function(fit1, fit2){
                   inv.the = solve(fit1$cov.the), 
                   inv.gam = solve(fit2$cov.gam), 
                   the0 = fit1$the, 
-                  gam0 = fit2$gam)
+                  gam0 = fit2$gam, 
+                  pi = fit2$pi)
   
   fit
   
