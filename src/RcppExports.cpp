@@ -6,22 +6,15 @@
 using namespace Rcpp;
 
 // rcpp_gfunction
-NumericMatrix rcpp_gfunction(double bet, double a, NumericVector alp, NumericVector the, NumericVector mu, NumericVector gam, NumericVector lam, NumericMatrix x, NumericVector rho, NumericVector pi);
-RcppExport SEXP _MR_rcpp_gfunction(SEXP betSEXP, SEXP aSEXP, SEXP alpSEXP, SEXP theSEXP, SEXP muSEXP, SEXP gamSEXP, SEXP lamSEXP, SEXP xSEXP, SEXP rhoSEXP, SEXP piSEXP) {
+NumericMatrix rcpp_gfunction(NumericVector alp, NumericVector the, NumericMatrix x);
+RcppExport SEXP _MR_rcpp_gfunction(SEXP alpSEXP, SEXP theSEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type bet(betSEXP);
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type alp(alpSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type the(theSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type gam(gamSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type lam(lamSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_gfunction(bet, a, alp, the, mu, gam, lam, x, rho, pi));
+    rcpp_result_gen = Rcpp::wrap(rcpp_gfunction(alp, the, x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -55,25 +48,21 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_obj
-double rcpp_obj(double bet, double a, NumericVector alp, NumericVector the, NumericVector mu, NumericVector gam, NumericVector lam, NumericMatrix x, NumericVector rho, NumericVector the0, NumericMatrix inv_the, NumericVector gam0, NumericMatrix inv_gam);
-RcppExport SEXP _MR_rcpp_obj(SEXP betSEXP, SEXP aSEXP, SEXP alpSEXP, SEXP theSEXP, SEXP muSEXP, SEXP gamSEXP, SEXP lamSEXP, SEXP xSEXP, SEXP rhoSEXP, SEXP the0SEXP, SEXP inv_theSEXP, SEXP gam0SEXP, SEXP inv_gamSEXP) {
+double rcpp_obj(double bet, NumericVector alp, NumericVector the, NumericVector lam, NumericVector the0, NumericMatrix inv_the, NumericVector pi, NumericMatrix inv_pi, NumericMatrix x);
+RcppExport SEXP _MR_rcpp_obj(SEXP betSEXP, SEXP alpSEXP, SEXP theSEXP, SEXP lamSEXP, SEXP the0SEXP, SEXP inv_theSEXP, SEXP piSEXP, SEXP inv_piSEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type bet(betSEXP);
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type alp(alpSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type the(theSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type gam(gamSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type lam(lamSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type the0(the0SEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type inv_the(inv_theSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type gam0(gam0SEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type inv_gam(inv_gamSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_obj(bet, a, alp, the, mu, gam, lam, x, rho, the0, inv_the, gam0, inv_gam));
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type inv_pi(inv_piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_obj(bet, alp, the, lam, the0, inv_the, pi, inv_pi, x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -97,25 +86,21 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_score
-NumericVector rcpp_score(double bet, double a, NumericVector alp, NumericVector the, NumericVector mu, NumericVector gam, NumericVector lam, NumericMatrix x, NumericVector rho, NumericVector the0, NumericMatrix inv_the, NumericVector gam0, NumericMatrix inv_gam);
-RcppExport SEXP _MR_rcpp_score(SEXP betSEXP, SEXP aSEXP, SEXP alpSEXP, SEXP theSEXP, SEXP muSEXP, SEXP gamSEXP, SEXP lamSEXP, SEXP xSEXP, SEXP rhoSEXP, SEXP the0SEXP, SEXP inv_theSEXP, SEXP gam0SEXP, SEXP inv_gamSEXP) {
+NumericVector rcpp_score(double bet, NumericVector alp, NumericVector the, NumericVector lam, NumericVector the0, NumericMatrix inv_the, NumericVector pi, NumericMatrix inv_pi, NumericMatrix x);
+RcppExport SEXP _MR_rcpp_score(SEXP betSEXP, SEXP alpSEXP, SEXP theSEXP, SEXP lamSEXP, SEXP the0SEXP, SEXP inv_theSEXP, SEXP piSEXP, SEXP inv_piSEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type bet(betSEXP);
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type alp(alpSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type the(theSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type gam(gamSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type lam(lamSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type the0(the0SEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type inv_the(inv_theSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type gam0(gam0SEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type inv_gam(inv_gamSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_score(bet, a, alp, the, mu, gam, lam, x, rho, the0, inv_the, gam0, inv_gam));
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type inv_pi(inv_piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_score(bet, alp, the, lam, the0, inv_the, pi, inv_pi, x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -140,12 +125,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_MR_rcpp_gfunction", (DL_FUNC) &_MR_rcpp_gfunction, 10},
+    {"_MR_rcpp_gfunction", (DL_FUNC) &_MR_rcpp_gfunction, 3},
     {"_MR_rcpp_hello_world", (DL_FUNC) &_MR_rcpp_hello_world, 0},
     {"_MR_rcpp_hess_lambda", (DL_FUNC) &_MR_rcpp_hess_lambda, 9},
-    {"_MR_rcpp_obj", (DL_FUNC) &_MR_rcpp_obj, 13},
+    {"_MR_rcpp_obj", (DL_FUNC) &_MR_rcpp_obj, 9},
     {"_MR_rcpp_obj_lambda", (DL_FUNC) &_MR_rcpp_obj_lambda, 9},
-    {"_MR_rcpp_score", (DL_FUNC) &_MR_rcpp_score, 13},
+    {"_MR_rcpp_score", (DL_FUNC) &_MR_rcpp_score, 9},
     {"_MR_rcpp_score_lambda", (DL_FUNC) &_MR_rcpp_score_lambda, 9},
     {NULL, NULL, 0}
 };

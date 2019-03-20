@@ -24,23 +24,25 @@ mr <- function(exposure, n, outcome, n1, n0, ref){
   
   ini <- fit3$ini
   
-  # fit <- NR.gim(ini$para, ini$map, 
-  #               ini$the0, ini$inv.the, 
-  #               ini$gam0, ini$inv.gam, 
-  #               n1, n0, ref)
-  
   para <- ini$para
   map <- ini$map
   inv.the <- ini$inv.the
-  inv.gam <- ini$inv.gam
+  inv.pi <- ini$inv.pi
   the0 <- ini$the0
-  gam0 <- ini$gam0
   pi <- ini$pi
   
-  obj.gim(para, map, the0, inv.the, gam0, inv.gam, n1, n0, ref)
-  score.gim(para, map, the0, inv.the, gam0, inv.gam, n1, n0, ref)
+  n <- nrow(ref)
+  ref <- ref[sample(n, n, TRUE), ]
+  ref <- scale(ref, scale = FALSE)
   
-  nr <- NR.lambda(para, map, n1, n0, ref, pi)
+  obj.gim(para, map, the0, inv.the, pi, inv.pi, ref)
+  score.gim(para, map, the0, inv.the, pi, inv.pi, ref)
+  
+  #nr <- NR.lambda(para, map, ref)
+  nr <- NR.gim(para, map, the0, inv.the, pi, inv.pi, ref)
+  
+  fit3$coefficients <- nr$coefficients
+  fit3$se <- nr$se
   
   fit3
   

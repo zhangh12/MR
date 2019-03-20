@@ -1,3 +1,31 @@
-.Rproj.user
+# History files
 .Rhistory
-.RData
+.Rapp.history
+
+# Example code in package build process
+*-Ex.R
+
+# R data files from past sessions
+.Rdata
+
+# RStudio files
+.Rproj.user/
+
+# Output files from R CMD build
+/*.tar.gz
+
+# Output files from R CMD check
+/*.Rcheck/
+
+# Library files
+
+# Temporary files
+*.bin
+inst/doc
+config.log
+config.status
+
+.Rproj.user
+*.o
+*.so
+

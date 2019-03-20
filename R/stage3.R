@@ -23,28 +23,21 @@ stage3 <- function(fit1, fit2){
   
   L <- length(fit1$alp)
   map <- list(bet = 1, 
-              a = 2, 
-              alp = 2 + (1:L), 
-              the = 2 + L + (1:L), 
-              mu = 2 + 2 * L + (1:L), 
-              gam = 2 + 3 * L + (1:L), 
-              lam = 2 + 4 * L + (1:(3 * L + 1)))
+              alp = 1 + (1:L), 
+              the = 1 + L + (1:L),
+              lam = 1 + 2 * L + (1:L))
   
   para <- c(bet = bet, 
-            a = fit2$a, 
             alp = fit1$alp, 
             the = fit1$the, 
-            mu = fit2$mu, 
-            gam = fit2$gam, 
-            lam = runif(3 * L + 1, -.1, .1))
+            lam = runif(L, .0, .0))
   
   fit$ini <- list(L = L, 
                   map = map, 
                   para = para, 
                   inv.the = solve(fit1$cov.the), 
-                  inv.gam = solve(fit2$cov.gam), 
+                  inv.pi = solve(fit2$cov.pi), 
                   the0 = fit1$the, 
-                  gam0 = fit2$gam, 
                   pi = fit2$pi)
   
   fit
