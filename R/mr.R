@@ -31,18 +31,13 @@ mr <- function(exposure, n, outcome, n1, n0, ref){
   the0 <- ini$the0
   pi <- ini$pi
   
-  n <- nrow(ref)
-  ref <- ref[sample(n, n, TRUE), ]
-  ref <- scale(ref, scale = FALSE)
+  nr <- outer.loop(para, map, the0, inv.the, pi, inv.pi, ref)
+  fit3$bet.gim <- nr$bet.gim
+  fit3$se.gim <- nr$se.gim
+  fit3$code <- nr$code
   
-  obj.gim(para, map, the0, inv.the, pi, inv.pi, ref)
-  score.gim(para, map, the0, inv.the, pi, inv.pi, ref)
-  
-  #nr <- NR.lambda(para, map, ref)
-  nr <- NR.gim(para, map, the0, inv.the, pi, inv.pi, ref)
-  
-  fit3$coefficients <- nr$coefficients
-  fit3$se <- nr$se
+  #fit3$coefficients <- nr$coefficients
+  #fit3$se <- nr$se
   
   fit3
   

@@ -1,7 +1,6 @@
 
 NR.gim <- function(para, map, the0, inv.the, pi, inv.pi, ref){
   
-  L <- (length(para) - 3) / 7
   n <- nrow(ref)
   
   bet <- para[map$bet]

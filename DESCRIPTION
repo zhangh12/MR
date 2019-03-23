@@ -1,6 +1,6 @@
 Package: MR
 Title: Mendelian Randomization for a Binary Outcome and a Continuous Exposure
-Version: 0.6.0
+Version: 0.7.0
 Date: 2019-03-17
 Author: Han Zhang, Bill Wheeler
 Description: This is a package for conducting Mendelian randomization analysis based on summary data. 

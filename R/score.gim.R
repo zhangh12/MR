@@ -1,13 +1,12 @@
 
-score.gim <- function(para, map, the0, inv.the, pi, inv.pi, ref){
-  
-  L <- (length(para) - 3) / 7
-  n <- nrow(ref)
+score.gim <- function(para, map, lam, the0, inv.the, pi, inv.pi, ref){
   
   bet <- para[map$bet]
   alp <- para[map$alp]
   the <- para[map$the]
-  lam <- para[map$lam]
+  if(is.null(lam)){
+    lam <- para[map$lam]
+  }
   
   ref <- as.matrix(ref)
   
