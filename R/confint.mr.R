@@ -11,7 +11,8 @@ confint.mr <- function(object, parm, level = 0.95, ...){
   rownames(wald.test) <- 'Wald'
   
   lm.test <- lmt(object, level, plot = isTRUE(list(...)$plot))
-  ci <- rbind(lm.test, wald.test)
+  lm.test1 <- lmt.gim(object, level, plot = isTRUE(list(...)$plot))
+  ci <- rbind(lm.test, lm.test1, wald.test)
   
   ci
   

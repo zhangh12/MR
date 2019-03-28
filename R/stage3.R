@@ -38,7 +38,10 @@ stage3 <- function(fit1, fit2){
                   inv.the = solve(fit1$cov.the), 
                   inv.pi = solve(fit2$cov.pi), 
                   the0 = fit1$the, 
-                  pi = fit2$pi)
+                  pi = fit2$pi, 
+                  cov.pi = fit2$cov.pi, 
+                  alp = fit1$alp, 
+                  cov.alp = fit1$cov.alp)
   
   fit
   

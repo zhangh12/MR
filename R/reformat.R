@@ -76,7 +76,7 @@ reformat <- function(exposure, n, outcome, n1, n0, ref){
     stop(msg)
   }
   
-  iv <- sort(unique(iv))
+  #iv <- sort(unique(iv))
   exposure <- exposure[iv, ]
   outcome <- outcome[iv, ]
   ref <- ref[, iv, drop = FALSE]

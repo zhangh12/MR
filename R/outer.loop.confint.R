@@ -1,15 +1,13 @@
 
 
-outer.loop <- function(para, map, the0, inv.the, pi, inv.pi, ref){
+outer.loop.confint <- function(bet, para, map, the0, inv.the, pi, inv.pi, ref, level){
   
   L <- (length(para) - 1) / 3
   
   n <- nrow(ref)
   
-  x0 <- para[c(map$bet, map$alp, map$the)]
-  if(abs(x0[1]) > 1){
-    x0[1] <- 0
-  }
+  x0 <- c(bet, para[c(map$alp, map$the)])
+  
   niter <- 50
   tol <- 1e-6
   
@@ -23,10 +21,10 @@ outer.loop <- function(para, map, the0, inv.the, pi, inv.pi, ref){
     
     ## inner loop
     lam <- NR.lambda(x0, map, ref)
-    s0 <- rcpp_deriv1(bet, alp, the, lam, the0, inv.the, pi, inv.pi, ref)
+    s0 <- rcpp_deriv1(bet, alp, the, lam, the0, inv.the, pi, inv.pi, ref)[-1]
     
-    R11 <- rcpp_R11(bet, alp, the, lam, the0, inv.the, pi, inv.pi, ref)
-    R12 <- rcpp_R12(bet, alp, the, lam, the0, inv.the, pi, inv.pi, ref)
+    R11 <- rcpp_R11(bet, alp, the, lam, the0, inv.the, pi, inv.pi, ref)[-1, -1]
+    R12 <- rcpp_R12(bet, alp, the, lam, the0, inv.the, pi, inv.pi, ref)[-1, ]
     R22 <- rcpp_R22(bet, alp, the, lam, the0, inv.the, pi, inv.pi, ref)
     
     h <- R11 - R12 %*% solve(R22) %*% t(R12)
@@ -38,7 +36,7 @@ outer.loop <- function(para, map, the0, inv.the, pi, inv.pi, ref){
     
     ei <- eigen(h)
     if(any(ei$value >= -1e-2)){
-      message('modifying hess')
+      #message('modifying hess')
       ev <- ei$values
       ev <- ev * (ev < -1e-2) - .01 * (ev >= -1e-2)
       h <- ei$vectors %*% diag(ev) %*% t(ei$vectors)
@@ -61,7 +59,7 @@ outer.loop <- function(para, map, the0, inv.the, pi, inv.pi, ref){
     
     for(j in 1:20){
       tau <- .5^(j-1)
-      x1 <- x0 - tau * d
+      x1 <- c(bet, x0[-1] - tau * d)
       g <- gfunction(x1, map, ref)
       lam1 <- NR.lambda(x1, map, ref)
       tmp <- as.vector(1 + g %*% lam1)
@@ -85,7 +83,7 @@ outer.loop <- function(para, map, the0, inv.the, pi, inv.pi, ref){
   
   if(max(abs(s0)) < tol && max.ev < 0){
     code <- 0
-    message(paste0('outer loop converges. grad=', deriv1, ', max.ev=', max.ev, ', max.fn=', max.fn))
+    #message(paste0('outer loop converges. grad=', deriv1, ', max.ev=', max.ev, ', max.fn=', max.fn))
   }else{
     if(max(abs(s0)) >= tol){
       code <- 1
@@ -100,12 +98,12 @@ outer.loop <- function(para, map, the0, inv.the, pi, inv.pi, ref){
   
   lam <- NR.lambda(x0, map, ref)
   para <- c(x0, lam)
-  V <- cov.gim(para, map, the0, inv.the, pi, inv.pi, ref)
+  V <- cov.gim.confint(para, map, the0, inv.the, pi, inv.pi, ref)
   
-  list(para = para, V = V, 
-       bet.gim = para[map$bet], 
-       se.gim = sqrt(diag(V))[map$bet], 
-       code = code)
+  s.bet <- -t(alp) %*% inv.pi %*% (bet * alp - pi)
+  
+  fac <- qchisq(level, df = 1)
+  as.vector(s.bet^2/V) - fac
   
 }
 

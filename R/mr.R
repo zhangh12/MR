@@ -30,11 +30,31 @@ mr <- function(exposure, n, outcome, n1, n0, ref){
   inv.pi <- ini$inv.pi
   the0 <- ini$the0
   pi <- ini$pi
+  cov.pi <- ini$cov.pi
+  alp <- ini$alp
+  cov.alp <- ini$cov.alp
+  
+  fit3$pi <- pi
+  fit3$cov.pi <- cov.pi
+  fit3$alp <- alp
+  fit3$cov.alp <- cov.alp
+  
+  n <- nrow(ref)
+  ref <- ref[sample(n, n, TRUE), ]
+  ref <- scale(ref, scale = FALSE)
   
   nr <- outer.loop(para, map, the0, inv.the, pi, inv.pi, ref)
   fit3$bet.gim <- nr$bet.gim
   fit3$se.gim <- nr$se.gim
   fit3$code <- nr$code
+  
+  fit3$para <- para
+  fit3$map <- map
+  fit3$the0 <- the0
+  fit3$inv.the <- inv.the
+  fit3$pi <- pi
+  fit3$inv.pi <- inv.pi
+  fit3$ref <- ref
   
   #fit3$coefficients <- nr$coefficients
   #fit3$se <- nr$se
