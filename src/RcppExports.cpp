@@ -94,6 +94,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_gfunction1
+NumericMatrix rcpp_gfunction1(double bet, double a, NumericVector alp, NumericVector the, NumericVector mu, NumericVector gam, NumericVector rho, NumericMatrix x, NumericVector pi);
+RcppExport SEXP _MR_rcpp_gfunction1(SEXP betSEXP, SEXP aSEXP, SEXP alpSEXP, SEXP theSEXP, SEXP muSEXP, SEXP gamSEXP, SEXP rhoSEXP, SEXP xSEXP, SEXP piSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type bet(betSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alp(alpSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type the(theSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type gam(gamSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_gfunction1(bet, a, alp, the, mu, gam, rho, x, pi));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hess_lambda
 NumericMatrix rcpp_hess_lambda(double bet, double a, NumericVector alp, NumericVector the, NumericVector mu, NumericVector gam, NumericVector lam, NumericMatrix x, NumericVector rho);
 RcppExport SEXP _MR_rcpp_hess_lambda(SEXP betSEXP, SEXP aSEXP, SEXP alpSEXP, SEXP theSEXP, SEXP muSEXP, SEXP gamSEXP, SEXP lamSEXP, SEXP xSEXP, SEXP rhoSEXP) {
@@ -215,6 +234,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_MR_rcpp_R22", (DL_FUNC) &_MR_rcpp_R22, 9},
     {"_MR_rcpp_deriv1", (DL_FUNC) &_MR_rcpp_deriv1, 9},
     {"_MR_rcpp_gfunction", (DL_FUNC) &_MR_rcpp_gfunction, 3},
+    {"_MR_rcpp_gfunction1", (DL_FUNC) &_MR_rcpp_gfunction1, 9},
     {"_MR_rcpp_hess_lambda", (DL_FUNC) &_MR_rcpp_hess_lambda, 9},
     {"_MR_rcpp_ind_score", (DL_FUNC) &_MR_rcpp_ind_score, 9},
     {"_MR_rcpp_obj", (DL_FUNC) &_MR_rcpp_obj, 9},

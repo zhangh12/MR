@@ -35,7 +35,7 @@ stage2 <- function(outcome, n1, n0, ref){
   list(a = fit$a, pi = fit$pi, mu = fit$mu, 
        gam = gam, cov.gam = fit$Sigma.gam, 
        cov.pi = Sigma.pi, se.pi = se.pi, 
-       g2 = fit$g2, H2 = fit$H2, 
+       g2 = fit$g2, H2 = fit$H2, n1 = n1, n0 = n0, 
        max.abs.diff=fit$max.abs.diff, max.rel.diff=fit$max.rel.diff, 
        score = fit$score, niter = fit$niter, converged=fit$converged)
   

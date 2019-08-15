@@ -21,6 +21,10 @@ rcpp_gfunction <- function(alp, the, x) {
     .Call(`_MR_rcpp_gfunction`, alp, the, x)
 }
 
+rcpp_gfunction1 <- function(bet, a, alp, the, mu, gam, rho, x, pi) {
+    .Call(`_MR_rcpp_gfunction1`, bet, a, alp, the, mu, gam, rho, x, pi)
+}
+
 rcpp_hess_lambda <- function(bet, a, alp, the, mu, gam, lam, x, rho) {
     .Call(`_MR_rcpp_hess_lambda`, bet, a, alp, the, mu, gam, lam, x, rho)
 }
